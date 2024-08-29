@@ -9,7 +9,6 @@ import { MdOutlineAddCircle } from 'react-icons/md';
 import ImportCSVForm from '../ImportCSv'; // Fixed import
 import '../../pages/style.css';
 import defaultimage from '../../Assets/defaultimage.png'
-import { useNavigate } from 'react-router-dom';
 
 const RegisteredNumber = () => {
     const [pipelines, setPipelines] = useState([]);
@@ -29,16 +28,6 @@ const RegisteredNumber = () => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        const userData = localStorage.getItem('phoneUserData')
-        const parsedData = userData ? JSON.parse(userData) : {}
-
-        if (parsedData.role !== 'superadmin') {
-            navigate('/')
-        }
-    }, [navigate])
 
     const calStatusOptions = [
         { value: '', label: 'All Call Statuses' },
@@ -158,22 +147,14 @@ const RegisteredNumber = () => {
         <>
             <HomeNavbar />
             <Container fluid>
-                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap: '20px' }} className='mt-4'>
-                    <div style={{display:'flex', gap:'15px', alignItems:'center'}}>
-
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }} className='mt-4'>
                     <h2>Phonebook Management</h2>
                     <Button variant="outline-success" onClick={handleShow}>
                         <MdOutlineAddCircle style={{ marginTop: '-2px' }} /> Import CSV
                     </Button>
-                    </div>
-
-                    <div style={{display:'flex', gap:'15px', alignItems:'center'}} >
-                        <Button variant="outline-success" onClick={() => navigate('/createuser')} >Create Account</Button>
-                        <Button variant="outline-success" onClick={() => navigate('/allusers')} >All Users</Button>
-                    </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap: '10px' }} className='mt-5'>
+                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap: '10px' }} className='mt-3'>
                     {/* Filter by pipeline */}
                     <div className="filter-container w-100">
                         <label htmlFor="pipeline-filter">Filter by Pipeline:</label>

@@ -29,10 +29,7 @@ const HodPhoneBook = () => {
     const navigate = useNavigate();
 
     const allowedRoles = [
-        'HOD',
-        'Team Leader',
-        'Manager', 
-        'Coordinator'
+        'HOD'
     ];
 
     const calStatusOptions = [
