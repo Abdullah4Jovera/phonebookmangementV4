@@ -18,14 +18,13 @@ const Login = () => {
         if (userData) {
             const parsedData = JSON.parse(userData);
             const role = parsedData.role;
-
-            // Navigate based on user role
             if (role === 'superadmin') {
                 navigate('/superadmindashboard');
             } else if (
                 role === 'HOD' ||
-                role === 'Manager' ||
-                role === 'TeamLead'
+                role === 'Team Leader' ||
+                role === 'Coordinator' ||
+                role === 'Manager'
             ) {
                 navigate('/hodphonebook');
             } else if (role === 'CEO' || role === 'MD') {
@@ -75,9 +74,9 @@ const Login = () => {
                     navigate('/superadmindashboard');
                 } else if (
                     role === 'HOD' ||
-                    role === 'Manager' ||
-                    role === 'TeamLead'
-                    // role === 'CEO_Mortgage_HOD'
+                    role === 'Team Leader' ||
+                    role === 'Coordinator' ||
+                    role === 'Manager'
                 ) {
                     navigate('/hodphonebook');
                 } else if (role === 'CEO' || role === 'MD') {

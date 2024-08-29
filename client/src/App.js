@@ -12,6 +12,7 @@ import HodPhoneBook from './pages/HodPhoneBook';
 import CEOphoneBook from './pages/CEOphoneBook';
 import Allusers from './pages/Allusers';
 import LeadConverted from './pages/LeadConverted';
+import RegisterUser from './pages/RegisterUser';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<Login />} />
+          <Route path='/createuser' element={<RegisterUser />} />
           <Route path='/superadmindashboard' element={<SuperadminDashboard />} />
           <Route path='/home' element={<Home />} />
           <Route path='/blocklist' element={<Blocklist />} />
