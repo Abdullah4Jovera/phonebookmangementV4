@@ -36,7 +36,7 @@ const createPipelineIdMap = async () => {
 
   for (const pipelineData of pipelinesData) {
     const pipelineId = await findOrCreatePipeline(pipelineData);
-    pipelinesMap.set(pipelineData.id, { id: pipelineId, name: pipelineData.name });
+    pipelinesMap.set(pipelineData.id.toString(), { id: pipelineId, name: pipelineData.name });
   }
   return pipelinesMap;
 };
@@ -49,7 +49,8 @@ const getPipelineName = (pipelineId, pipelinesMap) => {
 
 // Map user data including the pipeline ID and correct role
 const mapUserData = (userJson, pipelinesMap) => {
-  const pipelineData = pipelinesMap.get(userJson.pipeline);
+  const pipelineIdString = userJson.pipeline.toString(); // Convert pipeline to string for consistent lookup
+  const pipelineData = pipelinesMap.get(pipelineIdString);
 
   if (!pipelineData) {
     console.error(`Pipeline ID not found for user: ${userJson.name}`);
@@ -76,7 +77,7 @@ const mapUserData = (userJson, pipelinesMap) => {
 // Database connection function
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://localhost:27017/phonebookv4', {
+    await mongoose.connect('mongodb://localhost:27017/crm', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
