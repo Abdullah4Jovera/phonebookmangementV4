@@ -45,10 +45,21 @@ const Allusers = () => {
 
     const handleMenuClick = (e, user) => {
         if (e.key === "1") {
+            const selectedPipeline = user.pipeline.length > 0 
+                ? { value: user.pipeline[0]._id, label: user.pipeline[0].name } 
+                : null;
+
+            const selectedBranch = user.branch 
+                ? { value: user.branch._id, label: user.branch.name } 
+                : null;
+
+            console.log('Selected Pipeline:', selectedPipeline); // Debugging: Log pipeline
+            console.log('Selected Branch:', selectedBranch); // Debugging: Log branch
+
             setSelectedUser({
                 ...user,
-                pipeline: user.pipeline ? { value: user.pipeline._id, label: user.pipeline.name } : null,
-                branch: user.branch ? { value: user.branch._id, label: user.branch.name } : null,
+                pipeline: selectedPipeline,
+                branch: selectedBranch,
             });
             setIsModalVisible(true);
         } else if (e.key === "2") {
@@ -163,6 +174,8 @@ const Allusers = () => {
         label: branch.name,
     }));
 
+    console.log('Branch Options:', branchOptions); // Debugging: Log branch options
+
     const handlePasswordReset = async () => {
         if (passwords.newPassword !== passwords.confirmPassword) {
             message.error('Passwords do not match');
@@ -199,7 +212,6 @@ const Allusers = () => {
             [e.target.name]: e.target.value
         });
     };
-
     return (
         <>
             <div className="all-users-container">
@@ -209,70 +221,64 @@ const Allusers = () => {
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={20}>
                         <div className="cards-container" style={{ marginTop: '5%' }}>
-                            {/* {loading ? (
-                                <div style={{ textAlign: 'center', padding: '20px' }}>
-                                    <Spin size="large" style={{ color: 'black' }} />
-                                </div>
-                            ) : ( */}
-                                <Row>
-                                    {users.map((user) => (
-                                        <Col
-                                            xs={24}
-                                            sm={12}
-                                            md={12}
-                                            lg={12}
-                                            xxl={6}
-                                            key={user._id}
-                                            style={{ marginTop: '1%' }}
-                                        >
-                                            <Card
-                                                hoverable
-                                                style={{
-                                                    width: '90%',
-                                                    height: '100%',
-                                                    borderRadius: '8px',
-                                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                                                    pointerEvents: isUpdatingUser === user._id ? 'none' : 'auto',
-                                                }}
-                                                cover={
-                                                    <div className="user_image_container" style={{ position: 'relative' }}>
-                                                        {/* <img
-                                                            src={user.image ? user.image : 'No Image Found'}
-                                                            alt="user_image"
-                                                            className="user_image"
-                                                            style={{ display: isUpdatingUser === user._id ? 'none' : 'block' }}
-                                                        /> */}
-                                                        {isUpdatingUser === user._id && (
-                                                            <Spin
-                                                                size="large"
-                                                                style={{
-                                                                    position: 'absolute',
-                                                                    top: '50%',
-                                                                    left: '50%',
-                                                                    transform: 'translate(-50%, -50%)',
-                                                                    zIndex: 1,
-                                                                }}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                }
-
-                                            >
-                                                <Dropdown overlay={menu(user)} trigger={['click']}>
-                                                    <BsThreeDotsVertical
-                                                        className="icons_class"
-                                                        style={{ cursor: 'pointer' }}
-                                                    />
-                                                </Dropdown>
-                                                <div style={{ textAlign: 'center' }}>
-                                                    <h3>{user.name}</h3>
-                                                    <p>{user.email}</p>
+                            <Row>
+                                {users.map((user) => (
+                                    <Col
+                                        xs={24}
+                                        sm={12}
+                                        md={12}
+                                        lg={12}
+                                        xxl={6}
+                                        key={user._id}
+                                        style={{ marginTop: '1%' }}
+                                    >
+                                        <Card
+                                            hoverable
+                                            style={{
+                                                width: '90%',
+                                                height: '100%',
+                                                borderRadius: '8px',
+                                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                                                pointerEvents: isUpdatingUser === user._id ? 'none' : 'auto',
+                                            }}
+                                            cover={
+                                                <div className="user_image_container" style={{ position: 'relative' }}>
+                                                    {/* <img
+                                                        src={user.image ? user.image : 'No Image Found'}
+                                                        alt="user_image"
+                                                        className="user_image"
+                                                        style={{ display: isUpdatingUser === user._id ? 'none' : 'block' }}
+                                                    /> */}
+                                                    {isUpdatingUser === user._id && (
+                                                        <Spin
+                                                            size="large"
+                                                            style={{
+                                                                position: 'absolute',
+                                                                top: '50%',
+                                                                left: '50%',
+                                                                transform: 'translate(-50%, -50%)',
+                                                                zIndex: 1,
+                                                            }}
+                                                        />
+                                                    )}
                                                 </div>
-                                            </Card>
-                                        </Col>
-                                    ))}
-                                </Row>
-                            {/* )} */}
+                                            }
+
+                                        >
+                                            <Dropdown overlay={menu(user)} trigger={['click']}>
+                                                <BsThreeDotsVertical
+                                                    className="icons_class"
+                                                    style={{ cursor: 'pointer' }}
+                                                />
+                                            </Dropdown>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <h3>{user.name}</h3>
+                                                <p>{user.email}</p>
+                                            </div>
+                                        </Card>
+                                    </Col>
+                                ))}
+                            </Row>
                         </div>
                     </Col>
                 </Row>
@@ -290,45 +296,61 @@ const Allusers = () => {
                     <Form.Item label="Name">
                         <Input
                             value={selectedUser?.name}
-                            onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
+                            onChange={(e) =>
+                                setSelectedUser({
+                                    ...selectedUser,
+                                    name: e.target.value,
+                                })
+                            }
                         />
                     </Form.Item>
                     <Form.Item label="Email">
                         <Input
                             value={selectedUser?.email}
-                            onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
+                            onChange={(e) =>
+                                setSelectedUser({
+                                    ...selectedUser,
+                                    email: e.target.value,
+                                })
+                            }
                         />
                     </Form.Item>
                     <Form.Item label="Role">
                         <Input
                             value={selectedUser?.role}
-                            onChange={(e) => setSelectedUser({ ...selectedUser, role: e.target.value })}
+                            onChange={(e) =>
+                                setSelectedUser({
+                                    ...selectedUser,
+                                    role: e.target.value,
+                                })
+                            }
                         />
                     </Form.Item>
                     <Form.Item label="Pipeline">
                         <Select
-                            value={selectedUser?.pipeline}
                             options={pipelineOptions}
-                            onChange={(option) => InputChangeHandler(option, "pipeline")}
+                            value={selectedUser?.pipeline || null}
+                            onChange={(option) => InputChangeHandler(option, 'pipeline')}
                         />
                     </Form.Item>
                     <Form.Item label="Branch">
                         <Select
-                            value={selectedUser?.branch}
                             options={branchOptions}
-                            onChange={(option) => InputChangeHandler(option, "branch")}
+                            value={selectedUser?.branch || null}
+                            onChange={(option) => InputChangeHandler(option, 'branch')}
                         />
                     </Form.Item>
                 </Form>
             </Modal>
 
-            {/* Delete User Modal */}
+            {/* Delete Confirmation Modal */}
             <Modal
-                title="Delete User"
+                title="Confirm Delete"
                 visible={isDeleteModalVisible}
                 onOk={handleDelete}
                 onCancel={handleCancelDelete}
-                confirmLoading={isUpdatingUser !== null}
+                okText="Delete"
+                okButtonProps={{ danger: true }}
             >
                 <p>Are you sure you want to delete this user?</p>
             </Modal>
