@@ -8,7 +8,8 @@ import { MdAdd } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { CiEdit } from 'react-icons/ci';
 import defaultimage from '../Assets/defaultimage.png'
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 const HodPhoneBook = () => {
     const [hodData, setHodData] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
@@ -27,7 +28,8 @@ const HodPhoneBook = () => {
     const [pendingStatusChange, setPendingStatusChange] = useState(null);
     const [showConvertModal, setShowConvertModal] = useState(false);
     const navigate = useNavigate();
-
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const allowedRoles = [
         'HOD',
         'Team Leader',
@@ -113,10 +115,12 @@ const HodPhoneBook = () => {
         const results = hodData.filter(entry =>
             entry.number.toLowerCase().includes(searchQuery.toLowerCase()) &&
             (!selectedUser || entry.user._id === selectedUser.value) &&
-            (!selectedCalStatus || entry.calstatus === selectedCalStatus.value)
+            (!selectedCalStatus || entry.calstatus === selectedCalStatus.value) &&
+            (!startDate || new Date(entry.updatedAt) >= startDate) &&
+            (!endDate || new Date(entry.updatedAt) <= endDate)
         );
         setFilteredPhonebookData(results);
-    }, [searchQuery, hodData, selectedUser, selectedCalStatus]);
+    }, [searchQuery, hodData, selectedUser, selectedCalStatus, startDate, endDate]);
 
     const handleViewComments = (comments) => {
         setCommentsToView(comments);
@@ -267,6 +271,23 @@ const HodPhoneBook = () => {
                         />
                     </Form.Group>
                 </div>
+                <div className='w-100 mt-2'>
+                        <DatePicker
+                            selected={startDate}
+                            onChange={date => setStartDate(date)}
+                            placeholderText="Start Date"
+                            dateFormat="yyyy/MM/dd"
+                            className="form-control"
+                        />
+                        <DatePicker
+                            selected={endDate}
+                            onChange={date => setEndDate(date)}
+                            placeholderText="End Date"
+                            dateFormat="yyyy/MM/dd"
+                            className="form-control"
+                        />
+                    </div>
+
 
                 <div>
                     {error ? (

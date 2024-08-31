@@ -82,7 +82,7 @@ const ImportCSVForm = ({ pipelines, users, onSubmit }) => {
             </div>
 
             <div>
-                <label htmlFor="modalUser" className="mb-1">Select User:</label>
+                <label htmlFor="modalUser" className="mb-1">Select User </label>
                 <Select
                     id="modalUser"
                     options={filteredUsers.map(user => ({
@@ -97,7 +97,7 @@ const ImportCSVForm = ({ pipelines, users, onSubmit }) => {
             </div>
 
             <div>
-                <label htmlFor="visibilityUserSelect" className="mb-1">Select Visibility User:</label>
+                <label htmlFor="visibilityUserSelect" className="mb-1">Select Team Leader Or Coordinator </label>
                 <Select
                     id="visibilityUserSelect"
                     options={filteredUsers.map(user => ({
@@ -112,7 +112,7 @@ const ImportCSVForm = ({ pipelines, users, onSubmit }) => {
             </div>
 
             <div>
-                <label htmlFor="modalFile" className="mt-3">Upload CSV:</label>
+                <label htmlFor="modalFile" className="mt-3">Upload CSV</label>
                 <input
                     type="file"
                     id="modalFile"

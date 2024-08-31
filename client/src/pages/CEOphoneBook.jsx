@@ -8,7 +8,8 @@ import { MdAdd } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { CiEdit } from 'react-icons/ci';
 import defaultimage from '../Assets/defaultimage.png'
-
+import DatePicker from 'react-datepicker'; // Import DatePicker
+import "react-datepicker/dist/react-datepicker.css";
 const CEOphoneBook = () => {
   const [ceoPhoneBookData, setCeoPhoneBookData] = useState([]);
   const [pipelines, setPipelines] = useState([]);
@@ -30,7 +31,8 @@ const CEOphoneBook = () => {
   const [dropdownEntry, setDropdownEntry] = useState(null);
   const [pendingStatusChange, setPendingStatusChange] = useState(null);
   const [showConvertModal, setShowConvertModal] = useState(false);
-
+  const [startDate, setStartDate] = useState(null); // New state for start date
+    const [endDate, setEndDate] = useState(null); // New state for end date
   const navigate = useNavigate();
 
   const calStatusOptions = [
@@ -108,9 +110,16 @@ const CEOphoneBook = () => {
     if (searchQuery) {
       filtered = filtered.filter(entry => entry.number.toLowerCase().includes(searchQuery.toLowerCase()));
     }
+    if (startDate && endDate) {
+      filtered = filtered.filter(entry => {
+          const entryDate = new Date(entry.updatedAt);
+          return entryDate >= startDate && entryDate <= endDate;
+      });
+  }
+
 
     setFilteredData(filtered);
-  }, [selectedPipeline, selectedUser, selectedCalStatus, searchQuery, ceoPhoneBookData]);
+  }, [selectedPipeline, selectedUser, selectedCalStatus, searchQuery, ceoPhoneBookData ,startDate, endDate]);
 
   if (loading) return (
     <div className="no-results mt-5" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -242,7 +251,7 @@ const CEOphoneBook = () => {
         {/* Filter by pipeline */}
         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', gap: '10px' }} className='mt-5'>
           <div className="filter-container w-100">
-            <label htmlFor="pipeline-filter">Filter by Pipeline:</label>
+            <label htmlFor="pipeline-filter">Filter by Pipeline</label>
             <Select
               id="pipeline-filter"
               value={selectedPipeline}
@@ -254,7 +263,7 @@ const CEOphoneBook = () => {
 
           {/* Filter by user */}
           <div className="filter-container w-100">
-            <label htmlFor="user-filter">Filter by User:</label>
+            <label htmlFor="user-filter">Filter by User</label>
             <Select
               id="user-filter"
               value={selectedUser}
@@ -266,7 +275,7 @@ const CEOphoneBook = () => {
 
           {/* Filter by call status */}
           <div className="filter-container w-100">
-            <label htmlFor="user-filter">Filter by Call Status:</label>
+            <label htmlFor="user-filter">Filter by Call Status</label>
             <Form.Group controlId="selectCalStatus" className='w-100'>
               <Select
                 options={calStatusOptions}
@@ -277,6 +286,32 @@ const CEOphoneBook = () => {
               />
             </Form.Group>
           </div>
+          <div className="filter-container w-100">
+                    <label htmlFor="date-filter">Filter by  Date</label>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                            <DatePicker
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                selectsStart
+                                startDate={startDate}
+                                endDate={endDate}
+                                placeholderText="Start Date"
+                                dateFormat="yyyy/MM/dd"
+                                className="form-control"
+                            />
+                            <DatePicker
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                selectsEnd
+                                startDate={startDate}
+                                endDate={endDate}
+                                minDate={startDate}
+                                placeholderText="End Date"
+                                dateFormat="yyyy/MM/dd"
+                                className="form-control"
+                            />
+                        </div>
+                    </div>
 
           {/* Search by Number */}
           <Form.Group controlId="searchBarNumber" className='w-100'>
